@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,7 +11,9 @@ public class GameManager : MonoBehaviour
     private bool CameraSwap = true;
 
     public GameObject TS = null;
+    public GameObject ButtonGroup;
 
+    GameObject Mouse;
     public bool CAMERASWAP
     {
         get { return CameraSwap; }
@@ -20,6 +24,11 @@ public class GameManager : MonoBehaviour
         get { return instance; }
     }
 
+    public GameObject MOUSE
+    {
+        get { return Mouse; }
+    }
+
     private void Awake()
     {
         if(instance==null)
@@ -27,6 +36,9 @@ public class GameManager : MonoBehaviour
             instance = this;
 
             DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            
+            
         }else
         {
             if(instance!=this)
@@ -36,9 +48,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        Initialize();
+    }
+    
+    private void Initialize()
+    {
+        Mouse = GameObject.FindGameObjectWithTag("Mouse");
+    }
+
     public void TowerSwap()
     {
         CameraSwap = !CameraSwap;
         TS.SetActive(CameraSwap);
+        ButtonGroup.SetActive(CameraSwap);
     }
 }

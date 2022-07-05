@@ -11,9 +11,23 @@ public class Mouse : MonoBehaviour
 
     // Update is called once per frame
     public GameObject Tower = null;
+    public GameObject Tower2 = null;
 
     private bool WallState=false;
     private bool TowerZone = false;
+
+    GameObject[] ChildObejct;
+
+    int TowerNumber = 0;
+
+    private void Awake()
+    {
+        ChildObejct = new GameObject[transform.childCount];
+        for(int i = 0; i < ChildObejct.Length; i++)
+        {
+            ChildObejct[i] = transform.GetChild(i).gameObject;
+        }
+    }
 
     void Update()
     {
@@ -29,8 +43,15 @@ public class Mouse : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.A) && WallState && !TowerZone)
         {
-            GameObject T = Instantiate(Tower);
-            T.transform.position = new Vector3(transform.position.x, 3.0f, transform.position.z);
+            if (TowerNumber == 0)
+            {
+                GameObject T = Instantiate(Tower);
+                T.transform.position = new Vector3(transform.position.x, 3.0f, transform.position.z);
+            }else if(TowerNumber==1)
+            {
+                GameObject T = Instantiate(Tower2);
+                T.transform.position = new Vector3(transform.position.x, 3.0f, transform.position.z);
+            }
         }
     }
 
@@ -64,5 +85,15 @@ public class Mouse : MonoBehaviour
             
             TowerZone = false;
         }
+    }
+
+    public void ObjectSwap(int number)
+    {
+        for (int i = 0; i < ChildObejct.Length; i++)
+        {
+            ChildObejct[i].SetActive(false);
+        }
+        TowerNumber = number;
+        ChildObejct[number].SetActive(true);
     }
 }
